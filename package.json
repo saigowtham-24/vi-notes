@@ -1,2 +1,12 @@
-npm init -y
-npm install express
+{
+  "name": "vi-notes-backend",
+  "version": "1.0.0",
+  "description": "Backend API for storing writing sessions",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
