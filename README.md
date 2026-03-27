@@ -6,6 +6,7 @@ This project implements a backend API for storing writing sessions and keystroke
 
 - Create writing sessions
 - Retrieve stored sessions
+- Delete sessions
 - Store keystroke data (typing patterns)
 - REST API using Express.js
 
@@ -20,7 +21,7 @@ This project implements a backend API for storing writing sessions and keystroke
 
 ## Project Structure
 
-vi-notes-backend/
+vi-notes/
 │── app.js
 │── package.json
 │── README.md
@@ -28,6 +29,16 @@ vi-notes-backend/
 ---
 
 ## API Endpoints
+
+### GET /
+Returns API status and available endpoints.
+
+Response:
+{
+  "message": "Vi-Notes Backend Running"
+}
+
+---
 
 ### POST /session
 Stores a new writing session.
@@ -43,7 +54,12 @@ Example Request:
 
 Response:
 {
-  "message": "Session saved"
+  "message": "Session saved",
+  "data": {
+    "id": 0,
+    "content": "Hello world",
+    "keystrokes": [...]
+  }
 }
 
 ---
@@ -54,12 +70,21 @@ Retrieves all stored sessions.
 Response:
 [
   {
+    "id": 0,
     "content": "Hello world",
-    "keystrokes": [
-      { "key": "H", "time": 1 }
-    ]
+    "keystrokes": [...]
   }
 ]
+
+---
+
+### DELETE /session/:id
+Deletes a session by ID.
+
+Response:
+{
+  "message": "Session deleted"
+}
 
 ---
 
