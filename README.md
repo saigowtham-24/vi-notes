@@ -1,6 +1,6 @@
 # Vi-Notes Backend
 
-This project implements a backend API for storing writing sessions and keystroke data as part of the Vi-Notes authenticity verification system.
+This project implements a backend API for storing writing sessions and keystroke data as part of the Vi-Notes authenticity verification system. The system now uses MongoDB for persistent data storage.
 
 ## Features
 
@@ -8,6 +8,7 @@ This project implements a backend API for storing writing sessions and keystroke
 - Retrieve stored sessions
 - Delete sessions
 - Store keystroke data (typing patterns)
+- Persistent storage using MongoDB
 - REST API using Express.js
 
 ---
@@ -16,6 +17,8 @@ This project implements a backend API for storing writing sessions and keystroke
 
 - Node.js
 - Express.js
+- MongoDB
+- Mongoose
 
 ---
 
@@ -24,6 +27,7 @@ This project implements a backend API for storing writing sessions and keystroke
 vi-notes/
 │── app.js
 │── package.json
+│── .env
 │── README.md
 
 ---
@@ -41,7 +45,7 @@ Response:
 ---
 
 ### POST /session
-Stores a new writing session.
+Stores a new writing session in MongoDB.
 
 Example Request:
 {
@@ -56,7 +60,7 @@ Response:
 {
   "message": "Session saved",
   "data": {
-    "id": 0,
+    "_id": "mongodb_id",
     "content": "Hello world",
     "keystrokes": [...]
   }
@@ -65,12 +69,12 @@ Response:
 ---
 
 ### GET /session
-Retrieves all stored sessions.
+Retrieves all stored sessions from MongoDB.
 
 Response:
 [
   {
-    "id": 0,
+    "_id": "mongodb_id",
     "content": "Hello world",
     "keystrokes": [...]
   }
@@ -79,7 +83,7 @@ Response:
 ---
 
 ### DELETE /session/:id
-Deletes a session by ID.
+Deletes a session by MongoDB ID.
 
 Response:
 {
@@ -93,23 +97,35 @@ Response:
 1. Install dependencies  
 npm install  
 
-2. Start server  
+2. Create `.env` file  
+
+Add:
+MONGO_URI=your_mongodb_connection_string  
+PORT=3000  
+
+3. Start server  
 node app.js  
 
-3. Server runs on  
+4. Server runs on  
 http://localhost:3000  
+
+---
+
+## Deployment
+
+The backend is deployed on Render and uses environment variables for secure MongoDB connection.
 
 ---
 
 ## Future Improvements
 
-- Connect MongoDB for persistent storage  
-- Add authentication (login/signup)  
-- Detect pasted text patterns  
-- Improve keystroke analysis  
+- Add authentication (login/signup)
+- Implement validation for input data
+- Detect pasted text patterns
+- Improve keystroke behavior analysis
 
 ---
 
 ## Contribution Goal
 
-This project focuses on building backend APIs for handling writing session data and keystroke tracking as part of the Vi-Notes system.
+This project focuses on building a scalable backend system for handling writing session data and keystroke tracking with database integration as part of the Vi-Notes platform.
