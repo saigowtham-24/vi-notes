@@ -1,47 +1,36 @@
 const express = require("express");
+const mongoose = require("mongoose");
+require("dotenv").config();
+
 const app = express();
 
 app.use(express.json());
 
-let sessions = [];
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log(err));
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "Vi-Notes Backend Running",
-    endpoints: {
-      getSessions: "/session",
-      createSession: "POST /session",
-      deleteSession: "DELETE /session/:id"
-    }
-  });
+// Schema
+const sessionSchema = new mongoose.Schema({
+  content: String,
+  keystrokes: Array
 });
 
+const Session = mongoose.model("Session", sessionSchema);
+
+// POST API
 app.post("/session", (req, res) => {
-  const newSession = {
-    id: sessions.length,
-    ...req.body
-  };
-
-  sessions.push(newSession);
-
-  res.json({
-    message: "Session saved",
-    data: newSession
-  });
+  const data = req.body;
+  sessions.push(data);
+  res.json({ message: "Session saved", data });
 });
 
+// GET API
 app.get("/session", (req, res) => {
   res.json(sessions);
 });
 
-app.delete("/session/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  sessions = sessions.filter(session => session.id !== id);
-  res.json({ message: "Session deleted" });
-});
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
 });
