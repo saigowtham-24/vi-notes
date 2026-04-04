@@ -19,18 +19,40 @@ const sessionSchema = new mongoose.Schema({
 
 const Session = mongoose.model("Session", sessionSchema);
 
-// POST API
-app.post("/session", (req, res) => {
-  const data = req.body;
-  sessions.push(data);
-  res.json({ message: "Session saved", data });
+// Root route
+app.get("/", (req, res) => {
+  res.json({
+    message: "Vi-Notes Backend Running",
+    endpoints: {
+      getSessions: "/session",
+      createSession: "POST /session",
+      deleteSession: "DELETE /session/:id"
+    }
+  });
 });
 
-// GET API
-app.get("/session", (req, res) => {
+// POST
+app.post("/session", async (req, res) => {
+  const newSession = new Session(req.body);
+  await newSession.save();
+  res.json({ message: "Session saved", data: newSession });
+});
+
+// GET
+app.get("/session", async (req, res) => {
+  const sessions = await Session.find();
   res.json(sessions);
 });
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+// DELETE
+app.delete("/session/:id", async (req, res) => {
+  await Session.findByIdAndDelete(req.params.id);
+  res.json({ message: "Session deleted" });
+});
+
+// PORT
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
